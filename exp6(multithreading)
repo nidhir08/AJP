@@ -1,0 +1,57 @@
+EXPERIMENT 6
+AIM
+ Write a program to implement multithreading where thread 1 adds all even numbers and thread 2 adds all odd numbers from a given file which has large numbers of random positive number. 
+
+CODE
+import java.io.*;
+import java.util.*;
+class EvenSumThread extends Thread {
+private List<Integer> numbers;
+private int sum = 0;
+public EvenSumThread(List<Integer> numbers) {
+this.numbers = numbers;
+}
+public void run() {
+for (int num : numbers) {
+if (num % 2 == 0) {
+sum += num;
+}}
+System.out.println("Sum of even numbers: " + sum);
+}}
+class OddSumThread extends Thread {
+private List<Integer> numbers;
+private int sum = 0; public OddSumThread(List<Integer> numbers) {
+   this.numbers = numbers;
+   }
+   public void run() {
+   for (int num : numbers) {
+   if (num % 2 != 0) {
+   sum += num;
+   }}
+   System.out.println("Sum of odd numbers: " + sum);
+   } }
+  public class six {
+   public static void main(String[] args) {
+   List<Integer> numbers = new ArrayList<>();
+   try (BufferedReader br = new BufferedReader(new
+  FileReader("randomNumbers.txt"))) {
+   String line;
+ 
+   while ((line = br.readLine()) != null) {
+   numbers.add(Integer.parseInt(line.trim()));
+   }
+   } catch (IOException e) {
+   System.out.println("Error reading file: " + e.getMessage());
+   return;
+   }
+   EvenSumThread evenThread = new EvenSumThread(numbers);
+   OddSumThread oddThread = new OddSumThread(numbers);
+   evenThread.start();
+   oddThread.start();
+    try {
+   evenThread.join();
+   oddThread.join();
+   } catch (InterruptedException e) {
+   System.out.println("Thread interrupted: " + e.getMessage());
+   }
+   } } 
