@@ -1,0 +1,31 @@
+EXPERIMENT 5
+AIM
+ Create an user defined exception named InvalidCibilScore if the cibil score of a customer is below 8.5.
+
+
+CODE
+import java.util.*;
+class InvalidCibilScore extends Exception{
+public InvalidCibilScore(String message){
+super(message);
+}}
+public class five {
+public static void main(String[] args) {
+Scanner sc = new Scanner(System.in);
+System.out.print("Enter your Cibil Score :");
+int cs = sc.nextInt();
+try{
+if(cs < 8.5){
+throw new InvalidCibilScore("Cibil Score is below 8.5");
+}
+else{
+System.out.println("Valid Cibil Score");
+}}
+catch(InvalidCibilScore e){
+System.out.println(e);
+}
+finally{
+sc.close();
+System.out.println("Program executed successfully");
+}
+}}
