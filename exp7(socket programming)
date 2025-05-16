@@ -1,0 +1,105 @@
+EXPERIMENT 7
+AIM
+Write a Java program to demonstrate the concept of socket programming.
+
+
+CODE
+Server Side:
+package seven;
+import java.net.*;
+import java.io.*;
+public class Server {
+  
+    private Socket s = null;
+    private ServerSocket ss = null;
+    private DataInputStream in = null;
+    public Server(int port) {
+      
+        // Starts server and waits for a connection
+        try
+        {
+            ss = new ServerSocket(port);
+            System.out.println("Server started");
+            System.out.println("Waiting for a client ...");
+            s = ss.accept();
+            System.out.println("Client accepted");
+           
+            in = new DataInputStream(
+                new BufferedInputStream(s.getInputStream()));
+            String m = "";
+            while (!m.equals("BYE"))
+            {
+                try
+                {
+                    m = in.readUTF();
+                    System.out.println(m);
+                }
+                catch(IOException i)
+                {
+                    System.out.println(i);
+                }
+            }
+            System.out.println("Closing connection");
+            // Close connection
+            s.close();
+            in.close();
+        }
+        catch(IOException i)
+        {
+            System.out.println(i);
+        }
+    }
+    public static void main(String args[])
+    {
+        Server s = new Server(5001);
+    }
+}
+
+Client Side:
+package seven;
+import java.io.*;
+import java.net.*;
+public class client {
+  
+    private Socket s = null;
+    private DataInputStream in = null;
+    private DataOutputStream out = null;
+    public client(String addr, int port)
+    {
+        try {
+            s = new Socket(addr, port);
+            System.out.println("Connected");
+            in = new DataInputStream(System.in);
+            out = new DataOutputStream(s.getOutputStream());
+        }
+        catch (UnknownHostException u) {
+            System.out.println(u);
+            return;
+        }
+        catch (IOException i) {
+            System.out.println(i);
+            return;
+        }
+        String m = "";
+        while (!m.equals("BYE")) {
+            try {
+                m = in.readLine();
+                out.writeUTF(m);
+            }
+            catch (IOException i) {
+                System.out.println(i);
+            }
+        }
+        try {
+            in.close();
+            out.close();
+            s.close();
+        }
+        catch (IOException i) {
+            System.out.println(i);
+        }
+    }
+    public static void main(String[] args) {
+        client c = new client("127.0.0.1", 5001);
+    }
+}
