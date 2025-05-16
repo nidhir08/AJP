@@ -1,0 +1,93 @@
+EXPERIMENT 2
+AIM
+Create an abstract class BankAccount with the following: 
+a)An accountNumber (String) and balance (double) as instance variables. 
+b)A constructor to initialize the account number and balance. 
+c)Abstract methods: 
+deposit(double amount) 
+withdraw(double amount) 
+d)Create two subclasses: SavingsAccount: 
+Has an additional variable interestRate (double). 
+Overrides the deposit method to add interest to the balance. 
+Withdrawals are allowed only if the balance remains above a certain minimum (e.g., 500).
+ CurrentAccount: 
+Has an additional variable overdraftLimit (double). 
+Overrides the withdraw method to allow overdraft up to the specified limit. 
+Write a program that: 
+e)Creates objects of both subclasses. 
+f)Performs deposit and withdrawal operations. 
+g)Displays the final account details for each object. 
+
+## CODE
+import java.util.*;
+abstract class bankAccount{
+    String accNo;
+    double balance;
+   public bankAccount(String accNo , double balance){
+       this.accNo = accNo;
+       this.balance = balance; 
+   }
+   public abstract void deposit(double amount);
+   public abstract void withdraw(double amount);
+ 
+   public void displayDetail(){
+       System.out.println("Account no  "  + accNo);
+       System.out.println("Balance  " +balance);
+     }
+}
+class SavingsAccount extends bankAccount{
+   double interestRate;
+   static final double minBalance = 500;
+   
+   public SavingsAccount(String accNo, double balance, double interestRate){
+       super(accNo, balance);
+       this. interestRate = interestRate;
+   }
+   public void deposit(double amount){
+       balance += amount+(amount*interestRate/100);
+   }
+     public void withdraw(double amount){
+       if(balance-amount>=minBalance){
+           balance -= amount;
+       }
+       else{
+           System.out.println("Withdrawal denied");
+       }
+   } 
+}
+class  CurrentAccount extends bankAccount{
+   double overdraftLimit;
+  
+   public CurrentAccount(String accNo, double balance , double overdraftLimit){
+       super(accNo, balance);
+       this.overdraftLimit = overdraftLimit; 
+   }
+     public void deposit(double amount){
+       balance+=amount;
+   }
+   @Override
+   public void withdraw(double amount){
+       if(balance- amount>=overdraftLimit){
+           balance-=amount;
+       }
+       else{
+           System.out.println("Withdrawn denied");
+       }
+   }
+}
+public class bankDemo{
+   public static void main(String[] args) {
+       SavingsAccount savings = new SavingsAccount("BR101",10000, 20);
+       CurrentAccount current = new CurrentAccount("UK201",12300 ,1000);
+       System.out.println("Savings Account:");
+        savings.deposit(2000);
+        savings.withdraw(10000);
+        savings.displayDetail();
+        System.out.println("");
+        System.out.println("Current Account:");
+        current.deposit(800);
+        current.withdraw(5000);
+        current.displayDetail();
+      
+   }
+}
